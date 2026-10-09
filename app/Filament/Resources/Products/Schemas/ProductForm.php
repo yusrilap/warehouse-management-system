@@ -18,7 +18,7 @@ class ProductForm
                     ->label('SKU')
                     ->required()
                     ->maxLength(50)
-                    ->unique('ignoreRecord: true'),
+                    ->unique(ignoreRecord: true),
 
                 TextInput::make('barcode')
                     ->label('Barcode')
@@ -33,14 +33,14 @@ class ProductForm
                 Select::make('category_id')
                     ->label('Category')
                     ->relationship('category', 'name')
-                    ->serachable()
+                    ->searchable()
                     ->preload()
                     ->required(),
 
                 Select::make('unit_id')
                     ->label('Unit')
                     ->relationship('unit', 'name')
-                    ->serachable()
+                    ->searchable()
                     ->preload()
                     ->required(),
 

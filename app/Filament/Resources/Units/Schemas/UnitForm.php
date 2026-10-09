@@ -16,7 +16,7 @@ class UnitForm
                     ->label('Unit Code')
                     ->required()
                     ->maxLength(20)
-                    ->unique('ignoreRecord: true'),
+                    ->unique(ignoreRecord: true),
 
                 TextInput::make('name')
                     ->label('Unit Name')
