@@ -195,4 +195,73 @@ class InventoryService
             );
         });
     }
+
+    public function adjustStock(
+        Product $product,
+        Location $location,
+        float $actualQuantity,
+        ?Model $reference = null,
+        ?int $userId = null,
+        ?string $notes = null,
+    ): Stock {
+        if ($actualQuantity < 0) {
+            throw new InvalidArgumentException(
+                'Actual quantity cannot be negative.'
+            );
+        }
+
+        return DB::transaction(function () use (
+            $product,
+            $location,
+            $actualQuantity,
+            $reference,
+            $userId,
+            $notes
+        ) {
+            $stock = Stock::query()
+                ->where('product_id', $product->id)
+                ->where('location_id', $location->id)
+                ->lockForUpdate()
+                ->first();
+
+            $quantityBefore = $stock
+                ? (float) $stock->quantity
+                : 0;
+
+            $difference = $actualQuantity - $quantityBefore;
+
+            if ($difference == 0) {
+                throw new InvalidArgumentException(
+                    'Actual quantity is the same as current stock.'
+                );
+            }
+
+            if (! $stock) {
+                $stock = Stock::create([
+                    'product_id' => $product->id,
+                    'location_id' => $location->id,
+                    'quantity' => 0,
+                ]);
+            }
+
+            $stock->update([
+                'quantity' => $actualQuantity,
+            ]);
+
+            StockMovement::create([
+                'product_id' => $product->id,
+                'location_id' => $location->id,
+                'type' => StockMovement::TYPE_ADJUSTMENT,
+                'quantity' => $difference,
+                'quantity_before' => $quantityBefore,
+                'quantity_after' => $actualQuantity,
+                'reference_type' => $reference?->getMorphClass(),
+                'reference_id' => $reference?->getKey(),
+                'user_id' => $userId,
+                'notes' => $notes,
+            ]);
+
+            return $stock;
+        });
+    }
 }

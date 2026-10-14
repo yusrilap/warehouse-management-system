@@ -62,4 +62,9 @@ class Location extends Model
             'to_location_id'
         );
     }
+
+    public function stockAdjustmentItems(): HasMany
+    {
+        return $this->hasMany(StockAdjustmentItem::class);
+    }
 }
