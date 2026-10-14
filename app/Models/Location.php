@@ -41,4 +41,9 @@ class Location extends Model
     {
         return $this->hasMany(GoodsReceiptItem::class);
     }
+
+    public function stockOutItems(): HasMany
+    {
+        return $this->hasMany(StockOutItem::class);
+    }
 }
