@@ -57,3 +57,4 @@ class AdminPanelProvider extends PanelProvider
             ]);
     }
 }
+

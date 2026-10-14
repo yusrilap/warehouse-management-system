@@ -9,6 +9,17 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class StockMovement extends Model
 {
+
+    public const TYPE_GOODS_RECEIPT = 'GOODS_RECEIPT';
+
+    public const TYPE_STOCK_OUT = 'STOCK_OUT';
+
+    public const TYPE_TRANSFER_IN = 'TRANSFER_IN';
+
+    public const TYPE_TRANSFER_OUT = 'TRANSFER_OUT';
+
+    public const TYPE_ADJUSTMENT = 'ADJUSTMENT';
+
     protected $fillable = [
         'product_id',
         'location_id',
