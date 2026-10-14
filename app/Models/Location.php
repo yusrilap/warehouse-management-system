@@ -46,4 +46,20 @@ class Location extends Model
     {
         return $this->hasMany(StockOutItem::class);
     }
+
+    public function outgoingStockTransferItems(): HasMany
+    {
+        return $this->hasMany(
+            StockTransferItem::class,
+            'from_location_id'
+        );
+    }
+
+    public function incomingStockTransferItems(): HasMany
+    {
+        return $this->hasMany(
+            StockTransferItem::class,
+            'to_location_id'
+        );
+    }
 }

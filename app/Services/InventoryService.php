@@ -143,4 +143,56 @@ class InventoryService
             return $stock;
         });
     }
+
+    public function transferStock(
+        Product $product,
+        Location $fromLocation,
+        Location $toLocation,
+        float $quantity,
+        ?Model $reference = null,
+        ?int $userId = null,
+        ?string $notes = null,
+    ): void {
+        if ($quantity <= 0) {
+            throw new InvalidArgumentException(
+                'Transfer quantity must be greater than zero.'
+            );
+        }
+
+        if ($fromLocation->id === $toLocation->id) {
+            throw new InvalidArgumentException(
+                'Source and destination locations must be different.'
+            );
+        }
+
+        DB::transaction(function () use (
+            $product,
+            $fromLocation,
+            $toLocation,
+            $quantity,
+            $reference,
+            $userId,
+            $notes
+        ) {
+            $this->decreaseStock(
+                product: $product,
+                location: $fromLocation,
+                quantity: $quantity,
+                type: StockMovement::TYPE_TRANSFER_OUT,
+                reference: $reference,
+                userId: $userId,
+                notes: $notes,
+            );
+
+            $this->increaseStock(
+                product: $product,
+                location: $toLocation,
+                quantity: $quantity,
+                type: StockMovement::TYPE_TRANSFER_IN,
+                reference: $reference,
+                userId: $userId,
+                notes: $notes,
+            );
+        });
+    }
 }
