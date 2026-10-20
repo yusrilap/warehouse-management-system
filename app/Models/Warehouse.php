@@ -25,4 +25,9 @@ class Warehouse extends Model
     {
         return $this->hasMany('Location::class');
     }
+
+    public function stockOpnames(): HasMany
+    {
+        return $this->hasMany(StockOpname::class);
+    }
 }
