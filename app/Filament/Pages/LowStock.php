@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
 use BackedEnum;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Filters\SelectFilter;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class LowStock extends Page implements HasTable
 {
@@ -114,5 +116,13 @@ class LowStock extends Page implements HasTable
                     ->preload(),
             ])
             ->defaultSort('quantity');
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Auth::user();
+
+        return $user instanceof User
+            && $user->can('view low stock');
     }
 }

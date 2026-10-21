@@ -8,6 +8,8 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 
 class ProductsTable
@@ -57,7 +59,13 @@ class ProductsTable
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->visible(function (): bool {
+                        $user = Auth::user();
+
+                        return $user instanceof User
+                            && $user->can('manage products');
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

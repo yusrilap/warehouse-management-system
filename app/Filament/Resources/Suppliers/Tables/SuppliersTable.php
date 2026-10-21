@@ -8,6 +8,8 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 class SuppliersTable
 {
     public static function configure(Table $table): Table
@@ -45,7 +47,13 @@ class SuppliersTable
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->visible(function (): bool {
+                        $user = Auth::user();
+
+                        return $user instanceof User
+                            && $user->can('manage suppliers');
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

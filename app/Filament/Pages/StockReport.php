@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\Summarizers\Sum;
 use App\Filament\Exports\StockExporter;
 use Filament\Actions\ExportAction;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class StockReport extends Page implements HasTable
 {
@@ -167,9 +169,22 @@ class StockReport extends Page implements HasTable
 
             ->toolbarActions([
                 ExportAction::make()
-                    ->label('Export Stock Report')
-                    ->exporter(StockExporter::class),
+                    ->exporter(StockExporter::class)
+                    ->visible(function (): bool {
+                        $user = Auth::user();
+
+                        return $user instanceof User
+                            && $user->can('export stock report');
+                    })
             ])
             ->defaultSort('product.name');
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Auth::user();
+
+        return $user instanceof User
+            && $user->can('view stock report');
     }
 }

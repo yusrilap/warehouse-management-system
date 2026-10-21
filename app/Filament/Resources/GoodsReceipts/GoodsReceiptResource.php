@@ -15,6 +15,8 @@ use Filament\Tables\Table;
 use App\Filament\Resources\GoodsReceipts\Pages\ViewGoodsReceipt;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 
 class GoodsReceiptResource extends Resource
@@ -87,6 +89,38 @@ class GoodsReceiptResource extends Resource
         return [
             //
         ];
+    }
+
+    protected static function getAuthUser(): ?User
+    {
+        $user = Auth::user();
+
+        return $user instanceof User ? $user : null;
+    }
+
+    public static function canViewAny(): bool
+    {
+        return static::getAuthUser()?->can('view goods receipts') ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::getAuthUser()?->can('create goods receipts') ?? false;
+    }
+
+    public static function canEdit($record): bool
+    {
+        return false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return false;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return false;
     }
 
     public static function getPages(): array

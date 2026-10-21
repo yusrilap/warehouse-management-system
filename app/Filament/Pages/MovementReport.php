@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\Summarizers\Summarizer;
 use App\Filament\Exports\MovementExporter;
 use Filament\Actions\ExportAction;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 
 class MovementReport extends Page implements HasTable
@@ -231,9 +233,22 @@ class MovementReport extends Page implements HasTable
 
             ->toolbarActions([
                 ExportAction::make()
-                    ->label('Export Movement Report')
-                    ->exporter(MovementExporter::class),
+                    ->exporter(MovementExporter::class)
+                    ->visible(function (): bool {
+                        $user = Auth::user();
+
+                        return $user instanceof User
+                            && $user->can('export movement report');
+                    })
             ])
             ->defaultSort('created_at', 'desc');
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Auth::user();
+
+        return $user instanceof User
+            && $user->can('view movement report');
     }
 }
