@@ -5,9 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class StockOpname extends Model
 {
+
+    use LogsActivity;
+
     protected $fillable = [
         'opname_number',
         'opname_date',
@@ -37,4 +42,19 @@ class StockOpname extends Model
     {
         return $this->hasMany(StockOpnameItem::class);
     }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'number',
+                'date',
+                'warehouse_id',
+                'notes',
+                'user_id',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
 }

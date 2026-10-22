@@ -5,9 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class StockAdjustment extends Model
 {
+    
+    use LogsActivity;
+
     protected $fillable = [
         'adjustment_number',
         'adjustment_date',
@@ -32,4 +37,18 @@ class StockAdjustment extends Model
     {
         return $this->hasMany(StockAdjustmentItem::class);
     }
+    
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'number',
+                'date',
+                'notes',
+                'user_id',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
 }

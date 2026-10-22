@@ -25,6 +25,8 @@ class StockTransferResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Inventory Transactions';
+
     public static function form(Schema $schema): Schema
     {
         return StockTransferForm::configure($schema);

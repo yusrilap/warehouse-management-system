@@ -34,6 +34,8 @@ class MovementReport extends Page implements HasTable
 
     protected static ?string $navigationLabel = 'Movement Report';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Reports';
+
     public function table(Table $table): Table
     {
         return $table

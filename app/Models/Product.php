@@ -5,9 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Product extends Model
 {
+
+    use LogsActivity;
+
     protected $fillable = [
         'sku',
         'barcode',
@@ -70,5 +75,22 @@ class Product extends Model
     public function stockOpnameItems(): HasMany
     {
         return $this->hasMany(StockOpnameItem::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'sku',
+                'barcode',
+                'name',
+                'category_id',
+                'unit_id',
+                'minimum_stock',
+                'description',
+                'is_active',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

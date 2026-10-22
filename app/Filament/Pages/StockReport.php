@@ -33,6 +33,8 @@ class StockReport extends Page implements HasTable
 
     protected static ?string $navigationLabel = 'Stock Report';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Reports';
+
     public function table(Table $table): Table
     {
         return $table

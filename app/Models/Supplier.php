@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Supplier extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'code',
         'name',
@@ -28,4 +32,21 @@ class Supplier extends Model
     {
         return $this->hasMany(GoodsReceipt::class);
     }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'code',
+                'name',
+                'contact_person',
+                'phone',
+                'email',
+                'address',
+                'is_active',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
 }

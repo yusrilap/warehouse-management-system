@@ -24,6 +24,8 @@ class GoodsReceiptResource extends Resource
     protected static ?string $model = GoodsReceipt::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Inventory Transactions';
     
     public static function infolist(Schema $schema): Schema
     {

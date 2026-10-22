@@ -28,6 +28,8 @@ class LowStock extends Page implements HasTable
 
     protected static ?string $navigationLabel = 'Low Stock';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Inventory Monitoring';
+
     public function table(Table $table): Table
     {
         return $table
