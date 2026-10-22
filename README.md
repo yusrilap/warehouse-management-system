@@ -96,6 +96,7 @@ Stock Adjustment ────────────> Stock Correction
 
 Stock Opname ────────────────> Physical vs System Stock
                                Adjustment when required
+```
 
 ## Inventory Integrity
 
